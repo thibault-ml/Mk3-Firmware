@@ -42,6 +42,9 @@ def get_light():
 	global light_obj
 	return light_obj.read()
 
+def get_light_percentage():
+	return int(get_light() * 100 / 4095)
+
 adc_obj = pyb.ADC(pyb.Pin("ADC_UNREG"))
 ref_obj = pyb.ADC(0)
 temp_obj = pyb.ADC(17)

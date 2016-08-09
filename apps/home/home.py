@@ -72,11 +72,10 @@ tick = True
 def backlight_adjust():
 	if ugfx.backlight() == 0:
 		ugfx.power_mode(ugfx.POWER_ON)
-	l = pyb.ADC(16).read()
-	if (l > 90):
-		ugfx.backlight(100)
-	elif (l > 20):
-		ugfx.backlight(70)
+
+	lum_percent = onboard.get_light_percentage()
+	if (lum_percent > 30):
+		ugfx.backlight(lum_percent)
 	else:
 		ugfx.backlight(30)
 
@@ -296,11 +295,9 @@ def home_main():
 				inactivity_limit = 120
 			else:
 				inactivity_limit = 30
-			if battery_percent > 120:  #if charger plugged in
-				if ugfx.backlight() == 0:
-					ugfx.power_mode(ugfx.POWER_ON)
-				ugfx.backlight(100)
-			elif inactivity > inactivity_limit:
+
+			# If charger is not plugged in and we're inactive, turn screen off
+			if battery_percent < 120 and inactivity > inactivity_limit:
 				low_power()
 			else:
 				backlight_adjust()
